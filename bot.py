@@ -33,9 +33,6 @@ async def tpolis(ctx, arg1):
 
             response = requests.post('https://localhost:8081/wallet/open', data=data, verify=False)
             r = response.json()
-            print(r)
-        #print(r.keys())
-
             account = str(arg1)
             data_2 = '{"account":"'+account+'","amount":"'+amount2+'"}'
             send_tpolis = requests.post('https://localhost:8081/wallet/sendtransaction', data=data_2, verify=False)
