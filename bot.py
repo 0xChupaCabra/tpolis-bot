@@ -51,4 +51,28 @@ async def tpolis(ctx, arg1):
         embed = discord.Embed(title="Testnet Faucet", description=f'{ctx.message.author.mention}, you can claim tPOLIS once per day', color=0xf54242)
         embed.add_field(name="TXID", value='null')
         await ctx.send(embed=embed)
+        
+        
+@bot.command()
+async def genkey(ctx, arg2):
+    #channel = bot.get_channel(657257668456742959)
+    discord_id = ctx.message.author.id
+    
+    data = '{"name":"stepollo","password":"stepollo"}'
+
+    response = requests.post('https://localhost:8081/wallet/open', data=data, verify=False)
+    r = response.json()
+    
+    data_2 = '{"password":"stepollo", "keys":'+arg2+'}'
+    response_genkey = requests.post('https://localhost:8081/utils/genvalidatorkey', data=data_2, verify=False)
+    r2 = response_genkey.json()
+    if int(arg2) <= 128 and int(arg2) > 0:
+        embed = discord.Embed(title="Testnet Faucet", description=f'{ctx.message.author.mention}, your validator keys have been sent in DM', color=0xf54242)
+        await ctx.send(embed=embed)
+        await ctx.message.author.send(r2['keys'])
+    else:
+        embed = discord.Embed(title="Testnet Faucet", description=f'{ctx.message.author.mention}, you can generate 1-128 keys per request', color=0xf54242)
+        await ctx.send(embed=embed)
+
+
 bot.run('token') 
